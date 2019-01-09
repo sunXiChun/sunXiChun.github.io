@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          [iOS]定位使用全解 - sunxc | Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://github.com/sunXiChun/2018/12/30/iOSLocation/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/location_head.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header">
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#iOS" title="iOS">iOS</a>
+                            
+                        </div>
+                        <h1>[iOS]定位使用全解</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by sunXiChun on
+                            2018-12-30
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">sunxc</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>因项目需要，最近对iOS定位api进行了一次彻底的学习。其中不乏基站定位、iBeacon等意料之外的用法。经过一番尝试之后，把各方资料整理一下分享给大家。</p>
+<h3 id="一、知识点普及"><a href="#一、知识点普及" class="headerlink" title="一、知识点普及"></a>一、知识点普及</h3><p>手机基站定位、WIFI定位、GPS定位、IBeacon技术</p>
+<h4 id="手机基站定位"><a href="#手机基站定位" class="headerlink" title="手机基站定位"></a>手机基站定位</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">手机基站定位服务又叫做移动位置服务（LBS——Location Based Service）</span><br><span class="line">通过电信移动运营商的网络（如GSM网）获取移动终端用户的位置信息（经纬度坐标）</span><br><span class="line"></span><br><span class="line">传统的基站定位需要连接云端服务器，产生网络流量，iOS 4对其进行了优化，可以在没有网络连接时支持无网定位。</span><br><span class="line">因为苹果预先已经将一些重要基站（几十公里选一个）提前存储在iOS系统中，在无网情况下，不用上网也能通过这些本地基站信息定位到用户位置，</span><br><span class="line">但这个误差范围更大，在10公里到50公里。</span><br><span class="line"></span><br><span class="line">无网基站定位的前提是：您的手机能接受到内置在手机中的那些“重要基站”的信号，不一定是您手机所属运营商，只要能收到信号就可以了。</span><br><span class="line"></span><br><span class="line">特点</span><br><span class="line"></span><br><span class="line">定位速度最快, 耗电最少，误差几百上千米.</span><br></pre></td></tr></table></figure>
+<h4 id="WIFI定位"><a href="#WIFI定位" class="headerlink" title="WIFI定位"></a>WIFI定位</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">通过无线网卡手机周围所有的WIFI热点（不需要连接上，只需要有信号就行），获得它们的MAC地址，</span><br><span class="line">然后到苹果云端服务器查询这个热点登记的位置,计算（多个热点折中）得到当前位置。</span><br><span class="line"></span><br><span class="line">传统的WIFI定位需要网络，但是iOS对其进行了优化，可以实现无网WIFI定位。</span><br><span class="line">iOS设备在您有网络连接时，根据您的位置，自动下载您所在地区周围（几个街区宽度或者更多）所有的WIFI热点的信息到本地。</span><br><span class="line">之后，当您在周围行走并WIFI定位的时候，即使没有网络，iOS照样可以利用之前下载的WIFI热点信息定位出您的位置。</span><br><span class="line"></span><br><span class="line">特点</span><br><span class="line"></span><br><span class="line">WIFI定位速度、耗电和精度都介于基站和GPS之间，精度大概在几十米。</span><br><span class="line">WIFI定位的支持范围没有基站定位广，但是苹果的云端服务器一直在不断增加新的热点信息，使得热点定位支持的地区越来越多。</span><br></pre></td></tr></table></figure>
+<h4 id="GPS定位"><a href="#GPS定位" class="headerlink" title="GPS定位"></a>GPS定位</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GPS（Global Positioning System）即全球定位系统，是由美国建立的一个卫星导航定位系统，利用该系统，</span><br><span class="line">用户可以在全球范围内实现全天候、连续、实时的三维导航定位和测速；</span><br><span class="line"></span><br><span class="line">GPS定位精度可达10米以内, 不过这是美国军方控制的, 战争时期可能变的不稳定或者误报. </span><br><span class="line"></span><br><span class="line">特点：</span><br><span class="line">与基站定位和WIFI定位相比，GPS耗电最大，速度最慢，但是精度最高。</span><br></pre></td></tr></table></figure>
+<h4 id="IBeacon技术"><a href="#IBeacon技术" class="headerlink" title="IBeacon技术"></a>IBeacon技术</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">iBeacon是苹果公司2013年9月发布的移动设备用OS(iOS7)上配备的新功能。</span><br><span class="line">它采用了基于蓝牙4.0的低功耗蓝牙技术(Bluetooth Low Energy, BLE),主要是用作辅助室内定位的功能。</span><br><span class="line"></span><br><span class="line">iOS7对接收到的iBeacon信号进行解释后，向等待iBeacon资讯的所有应用软件发送UUID、Major、Minor及靠近程度。</span><br><span class="line">接收资讯的应用软件先确认UUID，如果确认是发送给自己的资讯，则再根据Major、Minor的组合进行处理。</span><br><span class="line"></span><br><span class="line">此技术被广泛使用在了商家信息推送，汽车泊车定位，展会等室内精准定位场景。国内有不少硬件厂商专攻这块，如智石科技的Bright Beacon。</span><br><span class="line"></span><br><span class="line">特点：</span><br><span class="line">低功耗，距离范围小，定位精准度高。</span><br></pre></td></tr></table></figure>
+<h2 id="二、iOS定位api详细解读"><a href="#二、iOS定位api详细解读" class="headerlink" title="二、iOS定位api详细解读"></a>二、iOS定位api详细解读</h2><p><a href="https://github.com/sunXiChun/fullLocation">工程Demo传送门</a></p>
+<p><strong>1、标准定位</strong></p>
+<p>iPhone的GPS与纯粹的GPS定位不同, 称为A-GPS, 即辅助GPS.<br>是一种将基站定位、WIFI定位、GPS定位混合使用的技术，定位时间长，精度高。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//一次性定位</span><br><span class="line">- (void)requestLocation;</span><br><span class="line"></span><br><span class="line">//持续定位</span><br><span class="line">- (void)startUpdatingLocation;</span><br><span class="line">- (void)stopUpdatingLocation;</span><br><span class="line"></span><br><span class="line">//通过CLLocationManagerDelegate回调告知定位结果</span><br><span class="line">- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray&lt;CLLocation *&gt; *)locations;</span><br><span class="line"></span><br><span class="line">//requestLocation的错误通知</span><br><span class="line">- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error;</span><br></pre></td></tr></table></figure>
+<p><strong>2、重大变化的位置服务</strong></p>
+<p>对于定位精度要求相对低的场景。可以使用基站定位告知重大位置变化，降低功耗。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (void)startMonitoringSignificantLocationChanges;</span><br><span class="line">- (void)stopMonitoringSignificantLocationChanges;</span><br><span class="line"></span><br><span class="line">//通过CLLocationManagerDelegate回调告知定位结果</span><br><span class="line">- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray&lt;CLLocation *&gt; *)locations;</span><br><span class="line">``` </span><br><span class="line">基站定位的使用需要基于AlwaysAuthorization权限。</span><br><span class="line"></span><br><span class="line">有意思的是基站定位不仅能在后台上报定位信息，在app被杀死的情况也能将app激活上报。</span><br><span class="line">根据这种特性，几乎可以把app做成杀不死的小强，不过苹果审核能不能过还是要看具体的应用场景。</span><br><span class="line"></span><br><span class="line">下面这段代码可以使app在杀死情况下被激活。</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>(BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary </em>)launchOptions {</p>
+<p>  if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {</p>
+<pre><code>//定位并上报
+</code></pre><p>  }</p>
+<p>  return YES;<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里app在后台被激活时，有些坑需要避免下。主线程的访问在后台是会被暂停的。</span><br><span class="line"></span><br><span class="line">**3、指南针**</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>//开启关闭指南针定位</p>
+<ul>
+<li>(void)startUpdatingHeading;</li>
+<li>(void)stopUpdatingHeading;</li>
+</ul>
+<p>//停止方向校对</p>
+<ul>
+<li>(void)dismissHeadingCalibrationDisplay;</li>
+</ul>
+<p>//通过CLLocationManagerDelegate回调告知定位结果</p>
+<ul>
+<li>(void)locationManager:(CLLocationManager <em>)manager didUpdateHeading:(CLHeading </em>)newHeading;</li>
+</ul>
+<p>//停是否显示方向的校对,返回yes的时候,将会校对正确之后才会停止</p>
+<ul>
+<li>(BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager;<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLHeading 中封装了指南针方向的信息。通过一定计算可以将方向计算出来。如demo中：</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>CGFloat heading = -1.0f <em> M_PI </em> newHeading.magneticHeading / 180.0f;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**4、访问事件**</span><br><span class="line"></span><br><span class="line">获取用户访问过的兴趣地点的位置信息, 应用可以使用访问服务, 它是重大变化的位置服务(2)的替代方案。</span><br><span class="line"></span><br><span class="line">如果在一段时间之前用户曾在某个位置呆过, 该服务能在用户到达或离开该位置时分别生成事件。</span><br><span class="line">该服务用于已经使用了显著位置变更服务的应用想要得到更低的电量消耗的情况下。</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>(void)startMonitoringVisits;</li>
+<li>(void)stopMonitoringVisits;</li>
+</ul>
+<p>//通过CLLocationManagerDelegate回调告知定位结果</p>
+<ul>
+<li><p>(void)locationManager:(CLLocationManager <em>)manager didVisit:(CLVisit </em>)visit;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">同2 也可以杀死情况被激活。</span><br><span class="line"></span><br><span class="line">**5、区域监听**</span><br><span class="line"></span><br><span class="line">对于指定经纬度、可设定半径范围进行监听。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>(void)startMonitoringForRegion:(CLRegion *)region;</p>
+</li>
+<li>(void)stopMonitoringForRegion:(CLRegion *)region; </li>
+</ul>
+<p>//通过CLLocationManagerDelegate回调告知定位结果<br>//进入该区域会调用此代理方法</p>
+<ul>
+<li>(void)locationManager:(CLLocationManager <em>)manager<br>  didEnterRegion:(CLRegion </em>)region;</li>
+</ul>
+<p>//离开该区域是调用此代理方法</p>
+<ul>
+<li>(void)locationManager:(CLLocationManager <em>)manager didExitRegion:(CLRegion </em>)region;</li>
+</ul>
+<p>//判断状态（是否在该区域内）</p>
+<ul>
+<li>(void)locationManager:(CLLocationManager <em>)manager<br>  didDetermineState:(CLRegionState)state forRegion:(CLRegion </em>)region;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLRegion是一个虚基类，这里使用CLCircularRegion来初始化。</span><br></pre></td></tr></table></figure>
+<p>CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:coordinate2D radius:radius identifier:@”identifier”];<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">同2 也可以杀死情况被激活。</span><br><span class="line"></span><br><span class="line">**6、iBeacon监听**</span><br><span class="line"></span><br><span class="line">iBeacon监听稍微复杂一些。</span><br><span class="line"></span><br><span class="line">需要先使用 CoreBluetooth 框架下的CBPeripheralManager建立一个蓝牙基站。</span><br></pre></td></tr></table></figure></p>
+<p>_peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()]; </p>
+<p>//通过CBPeripheralManagerDelegate回调</p>
+<p>#pragma mark - CBPeripheralManagerDelegate</p>
+<ul>
+<li><p>(void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral {<br>  switch (peripheral.state) {</p>
+<pre><code>case CBPeripheralManagerStatePoweredOn:
+{
+    NSLog(@&quot;peripheralManager powered on&quot;);
+    NSDictionary *peripheralData = [_region peripheralDataWithMeasuredPower:nil];
+    [peripheral startAdvertising:peripheralData];
+}
+    break;
+case CBPeripheralManagerStatePoweredOff:
+    NSLog(@&quot;peripheralManager powered off&quot;);
+    break;
+
+default:
+    break;
+</code></pre><p>  }<br>}</p>
+</li>
+<li><p>(void)peripheralManagerDidStartAdvertising:(CBPeripheralManager <em>)peripheral error:(nullable NSError </em>)error {<br>  NSLog(@”peripheralManager DidStartAdvertising: %@”,error.localizedDescription);<br>}</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">注意这里的(CLBeaconRegion *)_region，UUID，major，minor都应该与接收者同步，否则无法定位。</span><br></pre></td></tr></table></figure>
+<p>NSUUID <em>uuid = [[NSUUID alloc]initWithUUIDString:@”E6651486-4678-4353-9C74-95EBD6A307ED”];<br>CLBeaconMajorValue major = 1;<br>CLBeaconMajorValue minor = 1;<br>NSString </em>identifier = @”怪蜀黍的ibeacon”;<br>CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid major:major minor:minor identifier:identifier];<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iBeacon信号发射部分，也可以使用三方app代替，前提是UUID，major，minor都要匹配。</span><br><span class="line"></span><br><span class="line">下面接收端是重点。</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>(void)startRangingBeaconsInRegion:(CLBeaconRegion *)region;</p>
+</li>
+<li><p>(void)stopRangingBeaconsInRegion:(CLBeaconRegion *)region;</p>
+</li>
+</ul>
+<p>//通过CLLocationManagerDelegate回调告知定位结果</p>
+<ul>
+<li><p>(void)locationManager:(CLLocationManager <em>)manager didRangeBeacons:(NSArray&lt;CLBeacon </em>&gt; <em>)beacons inRegion:(CLBeaconRegion </em>)region;</p>
+</li>
+<li><p>(void)locationManager:(CLLocationManager <em>)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion </em>)region withError:(NSError *)error;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里(CLBeaconRegion *)region UUID，major，minor必须与发射者保持一致。</span><br><span class="line"></span><br><span class="line">返回结果CLBeacon中保存了相对位置信息：	</span><br><span class="line"></span><br><span class="line">- proximity 距离信息 用Immediate Near Far表示   </span><br><span class="line">- accuracy proximity的精确度表达，米为单位   </span><br><span class="line">- rssi 信号强度 分贝为单位</span><br><span class="line"></span><br><span class="line">实际测量结果 500ms上报一次，accuracy浮点数表示。</span><br><span class="line"></span><br><span class="line">**7、延迟定位**</span><br><span class="line"></span><br><span class="line">在设备进入低耗电量的状态，会进入延迟定位模式，省电。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>(void)allowDeferredLocationUpdatesUntilTraveled:(CLLocationDistance)distance timeout:(NSTimeInterval)timeout;</p>
+</li>
+<li><p>(void)disallowDeferredLocationUpdates;</p>
+</li>
+</ul>
+<p>//通过CLLocationManagerDelegate回调告知定位结果</p>
+<ul>
+<li><p>(void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager;</p>
+</li>
+<li><p>(void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager;</p>
+</li>
+<li><p>(void)locationManager:(CLLocationManager <em>)manager<br>  didFinishDeferredUpdatesWithError:(nullable NSError </em>)error;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">使用这个方法有很多要注意的地方：</span><br><span class="line"></span><br><span class="line">- desiredAccuracy必须设置成kCLLocationAccuracyBest</span><br><span class="line">- distanceFilter必须设置成kCLErrorDeferredDistanceFiltered</span><br><span class="line">- 必须能够使用GPS进行定位（而不仅仅是移动数据或者Wi-Fi）</span><br><span class="line"></span><br><span class="line">**8、反地理编码**</span><br><span class="line"></span><br><span class="line">这块就是常规用法了，经纬度换城市信息。</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>CLGeocoder *revGeo = [[CLGeocoder alloc] init];</p>
+<ul>
+<li>(void)reverseGeocodeLocation:(CLLocation *)location completionHandler:(CLGeocodeCompletionHandler)completionHandler;;</li>
+</ul>
+<p><code>`</code><br>国内的相对倾向于高德定位和百度定位的反地理编码，相对城市信息较全。</p>
+<h2 id="三、最后"><a href="#三、最后" class="headerlink" title="三、最后"></a>三、最后</h2><p>其中基站定位的部分很多还是需要大量测试的，因为基站定位有时几公里才发生一次，难以调试，加上应用在后台主线程调用被挂起等等因素，很容易写出bug。所以，我经常是骑着小黄车或者打车回家的路上测试。</p>
+<p>好了，全部介绍就到这里了，用法都在demo里可以找到，更深层的技术有兴趣的同学可以深入学习下，也可以一起完善这个项目，欢迎提pr。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/01/08/XCCDButton/" data-toggle="tooltip" data-placement="top" title="[iOS]XCCDButton">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/12/18/apple_review/" data-toggle="tooltip" data-placement="top" title="[iOS]聊一聊苹果审核">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#一、知识点普及"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">一、知识点普及</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#手机基站定位"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">手机基站定位</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#WIFI定位"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">WIFI定位</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#GPS定位"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">GPS定位</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#IBeacon技术"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">IBeacon技术</span></a></li></ol></li></ol><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#二、iOS定位api详细解读"><span class="toc-nav-number"></span> <span class="toc-nav-text">二、iOS定位api详细解读</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#三、最后"><span class="toc-nav-number"></span> <span class="toc-nav-text">三、最后</span></a>
+        
+        </li></div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#iOS" title="iOS">iOS</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://github.com/zld" target="_blank">zld iOS Developer</a></li>
+                    
+                        <li><a href="https://github.com/Petrie" target="_blank">Petrie PHP Programmer</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/xichuns">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/sunXiChun">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; sunXiChun 2019 
+                    <br>
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://github.com/sunXiChun/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = 'r45fhy7653897235wg5ye709d930f62e';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://github.com/sunXiChun/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
