@@ -142,14 +142,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -239,7 +239,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (void)startMonitoringSignificantLocationChanges;</span><br><span class="line">- (void)stopMonitoringSignificantLocationChanges;</span><br><span class="line"></span><br><span class="line">//通过CLLocationManagerDelegate回调告知定位结果</span><br><span class="line">- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray&lt;CLLocation *&gt; *)locations;</span><br></pre></td></tr></table></figure>
 <p>基站定位的使用需要基于AlwaysAuthorization权限。</p>
 <p>有意思的是基站定位不仅能在后台上报定位信息，在app被杀死的情况也能将app激活上报。<br>根据这种特性，几乎可以把app做成杀不死的小强，不过苹果审核能不能过还是要看具体的应用场景。</p>
-<p>下面这段代码可以使app在杀死情况下被激活。</p>
+<p>一般情况下，app切后台（applicationDidEnterBackground）和被杀死（applicationWillTerminate）情况下调用startMonitoringSignificantLocationChanges即可激活基站定位启动调起app功能，并在下面这段代码中区分启动类型。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</span><br><span class="line">    </span><br><span class="line">    if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) &#123;</span><br><span class="line">        //定位并上报</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这里app在后台被激活时，有些坑需要避免下。主线程的访问在后台是会被暂停的。</p>
 <p><strong>3、指南针</strong></p>
