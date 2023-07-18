@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content>
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+    <title>
+        
+          sunxc | Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://github.com/sunXiChun/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/home.png') 
+            /*config*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="site-heading">
+                        <h1>sunxc</h1>
+                        <!--<hr class="small">-->
+                        <span class="subheading">个人博客</span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">sunxc</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Main Content -->
+<div class="container">
+    <div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                post-container
+            ">
+            
+                <!-- Main Content -->
+
+
+<div class="post-preview">
+
+    <a href="/2023/07/18/云计算-Shell/">
+        <h2 class="post-title">
+            [云计算]Shell脚本
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            Shell脚本是运维日常工作中批量处理工作的一大利器，并且也是程序员绕不开的话题。今天我们从以下几个方面系统认识一下Shell脚本。
+1、shell基础2、条件测试3、if语句、循环、case、函数4、正则表达式5、sed6、awk7、linux系统操作脚本化实例
+...
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by sunXiChun on
+            2023-07-18
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/04/25/2021-4-25活力小组的禅性一天/">
+        <h2 class="post-title">
+            2021-4-25活力小组的禅性一天
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            活力小组的今日话题依然还是我引起的。
+早间，我在内省内疚对我的影响的时候，发现了跟随之而来的是压抑。体验着压抑，一阵胃里闹腾想吐，在我打字向群里倾诉的时候，一段记忆浮现于脑海。
+今天早上突然记起来，小时候被我爸逼着吃饭，有一阵子我抵触吃饭，被逼着吃，吃不完被我爸撵着打，围着村子逃了一圈，逃到爷爷家，我喊爷爷救命，我爸竟然受害者模式跟爷爷告状。最后怎么样的我忘了。后来只要是吃饭我就是压抑着，逼......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by sunXiChun on
+            2021-04-25
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/04/21/iOS面试题整理/">
+        <h2 class="post-title">
+            [iOS]iOS面试题整理
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            1. 启动优化思路上是定位+解决现有问题，规范+监控后续问题。A定位+解决现有问题app启动分main()函数前和main()函数后。main()函数前，exe() -&gt; 加载可执行文件 -&gt; 加载Dyld -&gt; Dyld加载动态库 -&gt; rebase -&gt; bind -&gt; Objc setup -&gt; initlalizersObjc setup：注......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by sunXiChun on
+            2021-04-21
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2021/04/20/一窥YYMemoryCache和Redis的LRU算法差异/">
+        <h2 class="post-title">
+            [iOS]一窥YYMemoryCache和Redis的LRU算法差异
+        </h2>
+        <h3 class="post-subtitle">
+            YYMemoryCache和Redis的LRU算法差异
+        </h3>
+        <div class="post-content-preview">
+            LRU是Least Recently Used的缩写，即最近最少使用，是一种常用的页面置换算法，选择最近最久未使用的页面予以淘汰。笔者今天挑选了OC端的YYMemoryCache和服务端的Redis这两个LRU算法的应用场景和大家一起分享下。
+一、YYCache中的LRUYYMemoryCache是OC的一个缓存库YYCache的内存缓存部分，使用双向链表+字典实现的LRU淘汰算法。
+我们先......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by sunXiChun on
+            2021-04-20
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2019/01/22/SatyaMind/">
+        <h2 class="post-title">
+            [psychology]参加萨提亚心理培训有感
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            最近参加了一个萨提亚式心理学培训课感受颇多。对我本人而言是一个全新的领域，三天课程下来充实又震撼，所以记录下来。
+百度百科显示：萨提亚模式又称萨提亚沟通模式，是由美国首位家庭治疗专家维琴尼亚·萨提亚（Virginia Satir）女士所创建的理论体系，萨提亚模式，又叫联合家庭治疗。其中最大的一个理论就是目前发生的人际关系、亲密关系问题或多或少都与原生家庭的关系模式有关。通过对原生家庭关系的深......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by sunXiChun on
+            2019-01-22
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2019/01/08/old_photos/">
+        <h2 class="post-title">
+            [photo]摄影照片欣赏
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            奥森
+小茴香花（没错就是菜市场卖de小茴香）
+厦门沙坡尾
+洛阳牡丹花
+...
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by sunXiChun on
+            2019-01-08
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2019/01/08/XCCDButton/">
+        <h2 class="post-title">
+            [iOS]XCCDButton
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            简单的带有冷却时间的按钮
+小小控件不成敬意
+用法：
+1234567v = [[XCCDButton alloc] initWithFrame:(CGRectMake(100, 100, 100, 100))                                  bgImage:[UIImage imageNamed:@&quot;button_bg&quot;]         ......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by sunXiChun on
+            2019-01-08
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/12/30/iOSLocation/">
+        <h2 class="post-title">
+            [iOS]定位使用全解
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            因项目需要，最近对iOS定位api进行了一次彻底的学习。其中不乏基站定位、iBeacon等意料之外的用法。经过一番尝试之后，把各方资料整理一下分享给大家。
+一、知识点普及手机基站定位、WIFI定位、GPS定位、IBeacon技术
+手机基站定位手机基站定位服务又叫做移动位置服务（LBS——Location Based Service）通过电信移动运营商的网络（如GSM网）获取移动终端用户的位置......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by sunXiChun on
+            2018-12-30
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/12/18/apple_review/">
+        <h2 class="post-title">
+            [iOS]聊一聊苹果审核
+        </h2>
+        <h3 class="post-subtitle">
+            Talk-about-apple-review.
+        </h3>
+        <div class="post-content-preview">
+            做了三年多的iOS开发，经历过多款app的提审历程，被苹果审核全身心的调教过。尤其是今年，被拒审至怀疑人生。现将一些奇葩的拒审经历和一些简单的应对措施整理整理，给大家一些参考。
+首先，还是建议大家仔细阅读下官方App Store 审核指南，最好是邀请你们的产品经理也仔细读下，很多规则是从功能和设计上需要遵循的，下面案例里面有介绍到。
+一、拒审case1、app预览和屏幕快照不合格正常情况，预......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by sunXiChun on
+            2018-12-18
+        </p>
+    
+
+</div>
+<hr>
+
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    
+</ul>
+
+
+
+                <br>
+
+                <!-- require APlayer -->
+                
+
+                <!-- 如果开启评论功能 -->
+                
+            </div>
+
+          <!-- Sidebar Container -->
+<div class="
+    col-lg-3 col-lg-offset-0
+    col-md-3 col-md-offset-0
+    col-sm-12
+    col-xs-12
+    sidebar-container
+">
+    
+        <!-- Featured Tags -->
+
+<section>
+    <!-- no hr -->
+    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+            
+            <a href="/tags/#psychology" title="psychology" rel="2">psychology</a>
+            
+        
+            
+            <a href="/tags/#iOS" title="iOS" rel="5">iOS</a>
+            
+        
+            
+            <a href="/tags/#photo" title="photo" rel="1">photo</a>
+            
+        
+            
+            <a href="/tags/#云计算" title="云计算" rel="1">云计算</a>
+            
+        
+    </div>
+</section>
+
+        <hr>
+    
+        <!-- Short About -->
+<section class="visible-md visible-lg">
+    <h5><a href="/about/">ABOUT ME</a></h5>
+    <div class="short-about">
+
+        
+            <img id = "avatar_pic" src="/img/supreme.png" />
+        
+
+        
+            <p>在道德与不道德的区分之外，有片田野。我将在那里见你。</p>
+        
+
+        <!-- SNS Link -->
+        <ul class="list-inline">
+            
+            
+            
+
+            
+
+            
+                <li>
+                    <a target="_blank" href="https://www.facebook.com/xichuns">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                </li>
+            
+
+            
+                <li>
+                    <a target="_blank"  href="https://github.com/sunXiChun">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                </li>
+            
+            
+            
+            
+        </ul>
+    </div>
+</section>
+
+        <hr>
+    
+        
+  <h5>RECENT POSTS</h3>
+  <div class="widget">
+    <ul>
+      
+        <li>
+          <a href="/2023/07/18/云计算-Shell/">[云计算]Shell脚本</a>
+        </li>
+      
+        <li>
+          <a href="/2021/04/25/2021-4-25活力小组的禅性一天/">2021-4-25活力小组的禅性一天</a>
+        </li>
+      
+        <li>
+          <a href="/2021/04/21/iOS面试题整理/">[iOS]iOS面试题整理</a>
+        </li>
+      
+        <li>
+          <a href="/2021/04/20/一窥YYMemoryCache和Redis的LRU算法差异/">[iOS]一窥YYMemoryCache和Redis的LRU算法差异</a>
+        </li>
+      
+        <li>
+          <a href="/2019/01/22/SatyaMind/">[psychology]参加萨提亚心理培训有感</a>
+        </li>
+      
+    </ul>
+  </div>
+
+        <hr>
+    
+        <!-- Friends Blog -->
+
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+
+    
+        <li><a href="https://github.com/zld" target="_blank">zld iOS Developer</a></li>
+    
+        <li><a href="https://github.com/Petrie" target="_blank">Petrie PHP Programmer</a></li>
+    
+        <li><a href="https://lije024.github.io/" target="_blank">骁驰 iOS Developer</a></li>
+    
+</ul>
+
+        <hr>
+    
+        
+    <h5>ARCHIVES</h5>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+
+        <hr>
+    
+</div>
+
+        
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/xichuns">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/sunXiChun">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; sunXiChun 2023 
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://github.com/sunXiChun/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://github.com/sunXiChun/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

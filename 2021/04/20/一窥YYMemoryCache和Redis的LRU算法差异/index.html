@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content>
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+    <title>
+        
+          [iOS]一窥YYMemoryCache和Redis的LRU算法差异 - sunxc | Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://github.com/sunXiChun/2021/04/20/一窥YYMemoryCache和Redis的LRU算法差异/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_header4.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#iOS" title="iOS">iOS</a>
+                            
+                        </div>
+                        <h1>[iOS]一窥YYMemoryCache和Redis的LRU算法差异</h1>
+                        <h2 class="subheading">YYMemoryCache和Redis的LRU算法差异</h2>
+                        <span class="meta">
+                            Posted by sunXiChun on
+                            2021-04-20
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">sunxc</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>LRU是Least Recently Used的缩写，即最近最少使用，是一种常用的页面置换算法，选择最近最久未使用的页面予以淘汰。笔者今天挑选了OC端的YYMemoryCache和服务端的Redis这两个LRU算法的应用场景和大家一起分享下。</p>
+<h3 id="一、YYCache中的LRU"><a href="#一、YYCache中的LRU" class="headerlink" title="一、YYCache中的LRU"></a>一、YYCache中的LRU</h3><p>YYMemoryCache是OC的一个缓存库YYCache的内存缓存部分，使用双向链表+字典实现的LRU淘汰算法。</p>
+<p>我们先来看看节点的数据结构设计</p>
+<p><img src="/img/lru/A1.jpeg" alt="img"></p>
+<p>YYLinkedMapNode是它的存储节点，设计了prev和next两个指针记录双向链表的前后数据。key和value是数据键值对，同时针对内存容量及访问时间两种淘汰策略设计了cost和_time。</p>
+<p>再看下容器的数据结构<br><img src="/img/lru//A2.png" alt="img"></p>
+<p>YYLinkedMap是一个链表+字典的结构，存储数据部分dic是使用Core Foundation框架下的CFMutableDictionaryRef字典，C语言实现的，相较于Foundation框架下的NSDictionary，没有ARC的内存管理，更加精简。<br>关于Core Foundation和Foundation的关系就牵扯到乔布斯当年收购NeXTSTEP的故事了，有兴趣的同学可以查阅相关资料。<br>OC提供了一套Toll-Free Briding可以自动转换部分Core Foundation框架和Foundation框架相配对的数据类型。    </p>
+<p>totalCost和totalCount是用于根据内存大小和存储数量纬度进行的统计，方便进行淘汰。head和tail是链表的头部和尾部记录位置。releaseOnMainThread是数据删除的时候，指定释放的线程在主线程，releaseAsynchronously是异步释放数据的控制。</p>
+<p>我们看下插入和访问数据时LRU算法是怎么操作的：<br><img src="/img/lru/A0.png" alt="img"><br>插入一个新节点，对应_YYLinkedMap中的insertNodeAtHead方法，处理两种情况：</p>
+<p>1、链表头部不存在，直接插入。</p>
+<p>2、链表头部存在，处理原head数据的prev指针指向和插入数据的next指针指向，head指针指向插入数据。</p>
+<p><img src="/img/lru/A7.png" alt="img"><br>访问已存在节点，对应_YYLinkedMap中的bringNodeToHead方法，分为三种情况：</p>
+<p>1、访问节点是链表头部，无操作。</p>
+<p>2、访问节点是链表尾部，尾部pop操作，并将该节点变更为_head指针。</p>
+<p>3、访问节点是中间部分，对该节点进行删除，并将该节点变更为_head指针。</p>
+<p>YYMemoryCache设计有内存消耗cost、数据总数count、存储时间age三个维度的数据淘汰限制。</p>
+<p>淘汰逻辑是：<br><img src="/img/lru/A6.png" alt="img"></p>
+<p>1、总的内存消耗totalCost超出了阈值costLimit的时候，从尾部开始往上遍历淘汰数据。</p>
+<p>2、总的数据总数totalCount超出了阈值countLimit的时候，从尾部开始往上遍历淘汰数据。</p>
+<p>2、总的数据总数totalAge超出了阈值countLimit的时候，从尾部开始往上遍历淘汰数据。</p>
+<p>整个操作是在pthread_mutex_t，linux的互斥锁里进行的，保证数据安全。并且由于releaseAsynchronously和releaseOnMainThread两个参数的设计，将数据淘汰后制定到指定线程中销毁，这段设计还是相当精彩的。</p>
+<p>同时，YYMemoryCache设置了收到系统内存警告以及app压后台操作进行内存缓存释放的操作，默认值都是YES。保证了应用的高可用性。</p>
+<h3 id="二、Redis中的LRU"><a href="#二、Redis中的LRU" class="headerlink" title="二、Redis中的LRU"></a>二、Redis中的LRU</h3><p>Redis并没有使用双向链表实现一个lru算法。</p>
+<p>首先看一下Redis数据节点的数据结构redisObject，每个redisObject都有一个24bit长度的lru字段，保存访问时间戳。这个时间戳是redis时钟计算的，由getLRUClock函数进行计算得出。<br><img src="/img/lru/A8.png" alt="img"></p>
+<p>redisObject只有2种情况会更新lru，创建时（createObject）和访问时（lookupKey）。<br><img src="/img/lru/A9.png" alt="img"></p>
+<p>实际运算时，是根据当前时间戳计算的空闲时间idle time，以下简称idle。函数实现参见estimateObjectIdleTime。</p>
+<p>现在看看Redis怎么运用LRU算法进行数据淘汰的，</p>
+<p>在Redis2.8之前，算法很简单，随机从dict中取出5个key，淘汰一个idle最大的。</p>
+<p>Redis3.0之后进行了改版：<br><img src="/img/lru/A13.png" alt="img"></p>
+<p>1、设计了回收池eviction_pool。eviction_pool为数组，大小为16个元素，eviction_pool中key按idle从小到大排序。</p>
+<p>2、dictGetSomeKeys随机选取N个key，如果它的idle比eviction_pool里面的Key的idle还要大，就把它添加到eviction_pool里面去，直到eviction_pool放满。</p>
+<p>3、放满后，每次有新key放入，需要将eviction_pool中idle最小的key移出。</p>
+<p>4、需要淘汰时，直接从eviction_pool中选取idle最大的key，再通过key读取数据进行淘汰。</p>
+<p>看下官方文档的淘汰效果（图片来自Redis官方文档）<br><img src="/img/lru/A15.png" alt="img"></p>
+<p>Theoretical LRU为理想中的lru算法,新增加的key和最近被访问的key都没被淘汰。</p>
+<p>Redis 2.8中随机采样5个key时，新增加的key和最近被访问的key都有一定概率被淘汰。</p>
+<p>Redis 3.0中随机采样5个key时，效果稍好一些。增加为10个key效果更佳。</p>
+<h3 id="三、对比"><a href="#三、对比" class="headerlink" title="三、对比"></a>三、对比</h3><p>1、YYMemoryCache使用双向链表实现的LRU，能实现数据的精确淘汰。</p>
+<p>其数据结构搭配了字典和双向链表搭配的方式，使得访问数据时查找时间复杂度由O(n)降低到O(1)。</p>
+<p>但，每个节点需要维护prev和next指针，这部分内存消耗无法避免。</p>
+<p>2、Redis的LRU，特别是3.0以后，回收池的设计，将全局的排序问题，转化成了局部排序。</p>
+<p>遍历16个元素的eviction_pool数组效率大大提升，而在若干次随机采样之后，eviction_pool里的元素就代表着全局key，而每次采样更新后，能够保证eviction_pool里的key是随机选择过的idle time最大的。</p>
+<p>需要淘汰时，就从数组尾部淘汰即可。</p>
+<p>这种近似的思想，提升了效率，很值得借鉴。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/04/21/iOS面试题整理/" data-toggle="tooltip" data-placement="top" title="[iOS]iOS面试题整理">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/01/22/SatyaMind/" data-toggle="tooltip" data-placement="top" title="[psychology]参加萨提亚心理培训有感">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+                
+                <!-- require APlayer -->
+                
+
+
+                
+                    <!-- Valine -->
+                    <div class="vcomments"></div>
+                    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+                    <script src="//cdn.jsdelivr.net/npm/valine"></script>
+                    <script>
+                        var GUEST = ['nick','mail','link'];
+                        var meta = '';
+                        meta = meta.split(',').filter(function (item) {
+                            return GUEST.indexOf(item)>-1;
+                        });
+                        var notify = 'false' == true ? true : false;
+                        var verify = 'false' == true ? true : false;
+                        new Valine({
+                            el: '.vcomments',
+                            notify: notify,
+                            verify: verify,
+                            app_id: "kpXPEmb4vatowyHxa4dYvy0N-gzGzoHsz",
+                            app_key: "qAL8XVpfEOi1zqGiglHYPWsv",
+                            placeholder: "Just go go",
+                            avatar:"mm",
+                            meta:meta
+                        });
+                    </script>
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#一、YYCache中的LRU"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">一、YYCache中的LRU</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#二、Redis中的LRU"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">二、Redis中的LRU</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#三、对比"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">三、对比</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#iOS" title="iOS">iOS</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://github.com/zld" target="_blank">zld iOS Developer</a></li>
+                    
+                        <li><a href="https://github.com/Petrie" target="_blank">Petrie PHP Programmer</a></li>
+                    
+                        <li><a href="https://lije024.github.io/" target="_blank">骁驰 iOS Developer</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/xichuns">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/sunXiChun">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; sunXiChun 2023 
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://github.com/sunXiChun/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://github.com/sunXiChun/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

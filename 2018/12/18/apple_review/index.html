@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content>
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+    <title>
+        
+          [iOS]聊一聊苹果审核 - sunxc | Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://github.com/sunXiChun/2018/12/18/apple_review/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/article_header/article_header1.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#iOS" title="iOS">iOS</a>
+                            
+                        </div>
+                        <h1>[iOS]聊一聊苹果审核</h1>
+                        <h2 class="subheading">Talk-about-apple-review.</h2>
+                        <span class="meta">
+                            Posted by sunXiChun on
+                            2018-12-18
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">sunxc</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>做了三年多的iOS开发，经历过多款app的提审历程，被苹果审核全身心的调教过。尤其是今年，被拒审至怀疑人生。现将一些奇葩的拒审经历和一些简单的应对措施整理整理，给大家一些参考。</p>
+<p>首先，还是建议大家仔细阅读下官方<a href="https://developer.apple.com/cn/app-store/review/guidelines/" target="_blank" rel="noopener">App Store 审核指南</a>，最好是邀请你们的产品经理也仔细读下，很多规则是从功能和设计上需要遵循的，下面案例里面有介绍到。</p>
+<h3 id="一、拒审case"><a href="#一、拒审case" class="headerlink" title="一、拒审case"></a>一、拒审case</h3><h4 id="1、app预览和屏幕快照不合格"><a href="#1、app预览和屏幕快照不合格" class="headerlink" title="1、app预览和屏幕快照不合格"></a>1、app预览和屏幕快照不合格</h4><p>正常情况，预览图片尺寸不对这样的低级问题是在上传的时候就能够检测到，直接能够看到错误。</p>
+<p>我们遇到过一次被坑到没商量的情况：<strong>5.5英寸的预览图里设计画了一个明显的iPhone X手机屏。</strong>当时还特地好几个人仔细的研究了下预览图，以为是隐藏功能被画出来了（当然这是另外一个拒审理由）。<br>直到第二次被打回来才意识到苹果强调的预览图设计规范，这才找的拒审的真正原因。</p>
+<p>这里不得不吐槽下，<strong>拒审的理由真的是晦涩难懂。</strong></p>
+<h4 id="2、定位的权限描述不够清晰问题"><a href="#2、定位的权限描述不够清晰问题" class="headerlink" title="2、定位的权限描述不够清晰问题"></a>2、定位的权限描述不够清晰问题</h4><p>这个应该比较常见了。定位权限有两种”when-in-use” 和 “always”两种，后者相对审核较为严格一些（至于如何设置相关的可以自行百度，这里不赘述了）。</p>
+<p>最初我们描述为”为了给您提供更好的服务，我们需要获取您的定位权限“之类的。第一次审核过了，之后的某次审核突然就被拒了，苹果爸爸以王者之姿审问我们，”always”权限具体是做啥用的，问的我们是措手不及。后来没办法，找产品经理好好的想了下我们定位使用的场景，把描述改为”该信息将用于XXX功能“。</p>
+<p>这里有个常见case，之前过审了的功能突然被拒了。所以，<strong>苹果爸爸的心情不好猜。</strong></p>
+<h4 id="3、动态修改桌面icon问题"><a href="#3、动态修改桌面icon问题" class="headerlink" title="3、动态修改桌面icon问题"></a>3、动态修改桌面icon问题</h4><p>Guideline 4.6 Design - Alternate App Icons</p>
+<p>iOS 10.3之后，苹果官方提供了可以动态修改桌面icon相关的API。有一次赶上中国情人节，突然我们想上一下这个功能。（ 具体功能参考下<a href="https://developer.apple.com/documentation/uikit/uiapplication/2806815-supportsalternateicons?language=objc" target="_blank" rel="noopener">UIApplication (UIAlternateApplicationIcons)相关API</a> ）</p>
+<p>功能是图标需要提前内置在包里，服务下发名称触发客户端更改桌面图标。切换图标的时候有个弹窗，当时为了去掉这个弹窗，让用户回到桌面有个惊喜，特地用分类干掉了那个弹窗。</p>
+<p>节日期间正常使用，皆大欢喜。之后的版本还想着跟着节日走，就一直没下。</p>
+<p>结果后来有一天，突然被拒审，理由是发现我们可以动态更换icon，应用内没有地方能触发。只好将其删除重新提审。</p>
+<p>这里需要重视一下的是，这种情况<strong>应该在审核备注里和苹果详细解释下这样的功能使用场景</strong>，否则很有可能被当成隐藏功能处理。在<a href="https://developer.apple.com/cn/app-store/review/guidelines/" target="_blank" rel="noopener">App Store 审核指南</a>有详细说明，隐藏功能后果是很严重的。</p>
+<h4 id="4、未安装微信弹提示"><a href="#4、未安装微信弹提示" class="headerlink" title="4、未安装微信弹提示"></a>4、未安装微信弹提示</h4><p>Guideline 4.2.3 - Design - Minimum Functionality</p>
+<p>使用了微信登录功能，审核员的iPad没安装微信。这种case，作为程序员，当然是处理成没安装报错给个提示好了。结果被拒理由是引导安装第三方应用。</p>
+<p>这一次，审核员还是比较贴心，建议我们最好弹出一个html去授权安装。</p>
+<p>后来没安装直接给隐藏了按钮重提。</p>
+<h4 id="5、监督用户内容"><a href="#5、监督用户内容" class="headerlink" title="5、监督用户内容"></a>5、监督用户内容</h4><p>Guideline 1.2 - Safety - User Generated Content</p>
+<p>这条case我们后来的理解是只要有用户产生的内容就要加上举报。</p>
+<p>这也是我前面提到的需要产品经理认识到的一条规则。</p>
+<h4 id="6、一些开关"><a href="#6、一些开关" class="headerlink" title="6、一些开关"></a>6、一些开关</h4><p>Guideline 2.3.1 - Hidden or undocumented features</p>
+<p>很多产品经理喜欢搞功能开关，这里涉及到一个隐藏功能的规则。这一条单独出现的情况，还真没见过。但是和其他条款一起出现，可就恐怖了。比如，Guideline 3.1.1 - In-App Purchase。</p>
+<p>这个可是切身体会过。我们线上app的功能页面有明显的支付宝图标，长得也像支付，还做了功能开关。被苹果抽查到直接被下架，理由就是2.3.1和3.1.1，再怎么解释不是支付都没有用。下架之后提审直接进慢队列。</p>
+<p>之后陷入了死亡被拒模式，被拒一次等两周，再被拒。加上审核被拒理由又不清楚只有违反条款，后来我们连服务接口都仔细审查了一遍，折腾了一个多月才搞上去。</p>
+<p>这一次，是真的让我们意识到，和苹果爸爸千万不要陷入信任危机。后来的提审，<strong>所有有可能隐藏的功能都要给审核打开，并且在备注里说明。</strong></p>
+<h4 id="7、支付"><a href="#7、支付" class="headerlink" title="7、支付"></a>7、支付</h4><p>Guideline 3.1.1 - In-App Purchase</p>
+<p><strong>虚拟产品支付必须用苹果支付。</strong> 这个应该是大忌，相信大家都有认识到。</p>
+<h4 id="8、应用模式"><a href="#8、应用模式" class="headerlink" title="8、应用模式"></a>8、应用模式</h4><p>Guideline 4.2 - Design - Minimum Functionality</p>
+<p>这一条是同行朋友给我讲的，来自上帝视角的审视，“如果不按照苹果审核指南进行修改您的应用，您可能希望构建一个HTML5 web应用程序”。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">If you cannot - or choose not to - revise your app to </span><br><span class="line">be in compliance with the App Store Review Guidelines, </span><br><span class="line">you may wish to build an HTML5 web app instead. </span><br><span class="line">You can distribute web apps directly on your web site; </span><br><span class="line">the App Store does not accept or distribute web apps.</span><br></pre></td></tr></table></figure>
+<p>这一条堪称绝杀，办法只能寄于说好话和修改应用模式了。</p>
+<h3 id="二、常见的审核措施"><a href="#二、常见的审核措施" class="headerlink" title="二、常见的审核措施"></a>二、常见的审核措施</h3><h4 id="1、预审方案"><a href="#1、预审方案" class="headerlink" title="1、预审方案"></a>1、预审方案</h4><p>国内有不少苹果应用的预审平台，比如<a href="https://wetest.qq.com/product/ios" target="_blank" rel="noopener">WeTest</a>等等，淘宝也有些提供预审服务的商家。可以作为一种预审方案，但是不推荐。某些专家有些时候还不如一个正儿八经的开发。</p>
+<p>这里可以介绍一个免费又好用的预审方案：TestFlight公开链接，苹果官方的功能。在应用提审的前几天可以提交一个TestFlight公开链接的构建版本，每个版本的第一个包需要审核，排队少反馈快，第一个包过审之后再次提包不需要审核。可以对外发布10000+测试安装，比起企业账号更加好用些。不少应用的内测邀请就是使用的TestFlight公开链接这个功能。</p>
+<h4 id="2、拒审沟通"><a href="#2、拒审沟通" class="headerlink" title="2、拒审沟通"></a>2、拒审沟通</h4><p>拒审之后可以回复邮件再次提包，可以申诉，还可以打电话。苹果审核的电话是<a href>001(408)862-7273</a>。这里是美国电话，国内手机拨打需要开通国际漫游服务。可以下载一个Skype，19块钱买一个美国包月服务。</p>
+<p>选择邮件回复的同学，千万要耐心。苹果审核不会故意刁难，查到最后都能找到根源，只是有时候沟通上不好理解。</p>
+<p>以上就是一些苹果提审的经验。不是很全，但都是亲身经历。有共鸣的同学欢迎指正。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/12/30/iOSLocation/" data-toggle="tooltip" data-placement="top" title="[iOS]定位使用全解">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                </ul>
+
+                <br>
+                
+                <!-- require APlayer -->
+                
+
+
+                
+                    <!-- Valine -->
+                    <div class="vcomments"></div>
+                    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+                    <script src="//cdn.jsdelivr.net/npm/valine"></script>
+                    <script>
+                        var GUEST = ['nick','mail','link'];
+                        var meta = '';
+                        meta = meta.split(',').filter(function (item) {
+                            return GUEST.indexOf(item)>-1;
+                        });
+                        var notify = 'false' == true ? true : false;
+                        var verify = 'false' == true ? true : false;
+                        new Valine({
+                            el: '.vcomments',
+                            notify: notify,
+                            verify: verify,
+                            app_id: "kpXPEmb4vatowyHxa4dYvy0N-gzGzoHsz",
+                            app_key: "qAL8XVpfEOi1zqGiglHYPWsv",
+                            placeholder: "Just go go",
+                            avatar:"mm",
+                            meta:meta
+                        });
+                    </script>
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#一、拒审case"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">一、拒审case</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#1、app预览和屏幕快照不合格"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1、app预览和屏幕快照不合格</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2、定位的权限描述不够清晰问题"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">2、定位的权限描述不够清晰问题</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3、动态修改桌面icon问题"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">3、动态修改桌面icon问题</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#4、未安装微信弹提示"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">4、未安装微信弹提示</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#5、监督用户内容"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">5、监督用户内容</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#6、一些开关"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">6、一些开关</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#7、支付"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">7、支付</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#8、应用模式"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text">8、应用模式</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#二、常见的审核措施"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">二、常见的审核措施</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#1、预审方案"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">1、预审方案</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2、拒审沟通"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">2、拒审沟通</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#iOS" title="iOS">iOS</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://github.com/zld" target="_blank">zld iOS Developer</a></li>
+                    
+                        <li><a href="https://github.com/Petrie" target="_blank">Petrie PHP Programmer</a></li>
+                    
+                        <li><a href="https://lije024.github.io/" target="_blank">骁驰 iOS Developer</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/xichuns">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/sunXiChun">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; sunXiChun 2023 
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://github.com/sunXiChun/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://github.com/sunXiChun/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
